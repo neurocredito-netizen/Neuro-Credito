@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neuro Crédito — Disputa Inteligente</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --gold:#D4AF37;--gold2:#FFD700;--gold3:#B8960C;
+    --white:#ffffff;--gray:#9a9a9a;--gray2:#555;
+    --border:#2a2a2a;--radius-md:8px;--radius-lg:12px;
+  }
+  html,body{background:#0a0a0a;min-height:100vh;font-family:'Inter','Segoe UI',system-ui,sans-serif}
+  body{display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem 4rem}
+  .w{background:#0e0e0e;border:0.5px solid #1e1e1e;border-radius:20px;padding:2.5rem;width:100%;max-width:680px}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .header{display:flex;align-items:center;gap:14px;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:0.5px solid #1e1e1e}
+  .logo{width:48px;height:48px;border-radius:10px;background:#1a1600;border:0.5px solid var(--gold3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .logo i{font-size:22px;color:var(--gold)}
+  .h-title{font-size:20px;font-weight:600;color:var(--white)}
+  .h-sub{font-size:12px;color:var(--gray);margin-top:3px;letter-spacing:.03em}
+  .stepper{display:flex;align-items:flex-start;margin-bottom:2rem}
+  .step-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+  .step-dot{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--gray2);background:#0a0a0a;transition:all .25s}
+  .step-dot.active{border-color:var(--gold);color:var(--gold);background:#1a1600}
+  .step-dot.done{border-color:var(--gold3);background:var(--gold3);color:#0a0a0a}
+  .step-dot.done i{font-size:14px}
+  .step-label{font-size:11px;color:var(--gray2);margin-top:6px;text-align:center;white-space:nowrap}
+  .step-label.active{color:var(--gold)}
+  .step-label.done{color:var(--gold3)}
+  .step-line{flex:1;height:1px;background:var(--border);margin-top:18px;transition:background .25s}
+  .step-line.done{background:var(--gold3)}
+  .panel{display:none}.panel.active{display:block}
+  .panel-title{font-size:18px;font-weight:600;color:var(--white);margin-bottom:.4rem}
+  .panel-desc{font-size:13px;color:var(--gray);margin-bottom:1.5rem;line-height:1.6}
+  .frow{margin-bottom:1.25rem}
+  .flabel{font-size:11px;color:var(--gray);margin-bottom:6px;display:block;letter-spacing:.06em;text-transform:uppercase}
+  .finput{width:100%;background:#111;border:0.5px solid #2a2a2a;border-radius:var(--radius-md);padding:10px 14px;color:#fff;font-size:14px;outline:none;transition:border-color .2s;font-family:inherit;-webkit-appearance:none}
+  .finput:focus{border-color:var(--gold3)}
+  .finput::placeholder{color:#3a3a3a}
+  select.finput{cursor:pointer}
+  select.finput option{background:#111;color:#fff}
+  textarea.finput{resize:vertical;min-height:90px;line-height:1.6}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .badge-group{display:flex;flex-wrap:wrap;gap:8px}
+  .badge{padding:7px 14px;border-radius:var(--radius-md);border:0.5px solid #2a2a2a;cursor:pointer;font-size:13px;color:var(--gray);background:#111;transition:all .2s;user-select:none}
+  .badge.sel{border-color:var(--gold);color:var(--gold);background:#1a1600}
+  .badge:hover:not(.sel){border-color:#444;color:#ccc}
+  .doc-drop{border:1px dashed #2a2a2a;border-radius:10px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s;background:#0e0e0e}
+  .doc-drop:hover{border-color:var(--gold3)}
+  .doc-drop i{font-size:28px;color:#333;display:block;margin-bottom:.5rem}
+  .doc-drop-label{font-size:13px;color:#444}
+  .doc-drop-label span{color:var(--gold3)}
+  .doc-list{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+  .doc-item{display:flex;align-items:center;gap:10px;background:#111;border:0.5px solid #2a2a2a;border-radius:var(--radius-md);padding:9px 12px}
+  .doc-item i{color:var(--gold3);font-size:16px}
+  .doc-item-name{font-size:13px;color:#ccc;flex:1}
+  .doc-item-rm{background:none;border:none;cursor:pointer;color:#444;font-size:14px;padding:4px;transition:color .2s;line-height:1}
+  .doc-item-rm:hover{color:#E24B4A}
+  .review-section{background:#111;border:0.5px solid #2a2a2a;border-radius:10px;padding:1.25rem;margin-bottom:12px}
+  .review-header{display:flex;align-items:center;gap:8px;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:0.5px solid #1e1e1e}
+  .review-header i{font-size:16px;color:var(--gold3)}
+  .review-header span{font-size:13px;font-weight:600;color:var(--gold)}
+  .review-row{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid #1a1a1a}
+  .review-row:last-child{border-bottom:none}
+  .rk{font-size:12px;color:var(--gray);width:140px;flex-shrink:0}
+  .rv{font-size:13px;color:var(--white);text-align:right;word-break:break-word;max-width:260px}
+  .rv.gold{color:var(--gold)}
+  .progress-bar{height:2px;background:#1a1a1a;border-radius:1px;margin-bottom:2rem;overflow:hidden}
+  .progress-fill{height:100%;background:var(--gold);transition:width .4s ease;border-radius:1px}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:0.5px solid #1e1e1e}
+  .btn-back{background:none;border:0.5px solid #2a2a2a;border-radius:var(--radius-md);padding:10px 20px;color:var(--gray);cursor:pointer;font-size:14px;transition:all .2s;font-family:inherit;display:flex;align-items:center;gap:6px}
+  .btn-back:hover{border-color:#444;color:#ccc}
+  .btn-next{background:var(--gold);border:none;border-radius:var(--radius-md);padding:11px 28px;color:#0a0a0a;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s;font-family:inherit;display:flex;align-items:center;gap:8px}
+  .btn-next:hover{background:var(--gold2)}
+  .btn-next:active{transform:scale(.98)}
+  .btn-next:disabled{opacity:.5;cursor:not-allowed}
+  .step-counter{font-size:12px;color:#444}
+  .alert-box{background:#1a1600;border:0.5px solid var(--gold3);border-radius:var(--radius-md);padding:10px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:1.25rem}
+  .alert-box i{color:var(--gold);font-size:16px;margin-top:1px;flex-shrink:0}
+  .alert-box span{font-size:13px;color:#ccc;line-height:1.5}
+  .success-wrap{text-align:center;padding:2rem 1rem}
+  .success-icon{width:72px;height:72px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem}
+  .success-icon i{font-size:32px;color:var(--gold)}
+  .success-title{font-size:22px;font-weight:600;color:var(--white);margin-bottom:.75rem}
+  .success-desc{font-size:14px;color:var(--gray);line-height:1.7;max-width:420px;margin:0 auto 2rem}
+  .folio{font-family:'Courier New',monospace;font-size:18px;color:var(--gold);background:#1a1600;border:0.5px solid var(--gold3);border-radius:var(--radius-md);padding:10px 24px;display:inline-block;margin-bottom:2rem;letter-spacing:.1em}
+  .timeline{text-align:left;max-width:400px;margin:0 auto 2rem}
+  .tl-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+  .tl-dot{width:10px;height:10px;border-radius:50%;background:var(--gold3);margin-top:4px;flex-shrink:0}
+  .tl-label{font-size:13px;color:#aaa;line-height:1.5}
+  .tl-label strong{color:var(--white);font-weight:500}
+  .btn-restart{background:none;border:0.5px solid var(--gold3);border-radius:var(--radius-md);padding:11px 28px;color:var(--gold);cursor:pointer;font-size:14px;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+  .btn-restart:hover{background:#1a1600}
+  .spinner{width:16px;height:16px;border:2px solid #3a3a00;border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media(max-width:520px){
+    body{padding:1rem .5rem 3rem}
+    .w{padding:1.5rem 1.25rem}
+    .grid2{grid-template-columns:1fr}
+    .h-title{font-size:17px}
+    .step-label{font-size:10px}
+  }
+</style>
+</head>
+<body>
+<div class="w">
+  <h1 class="sr-only">Neuro Crédito — Wizard de disputa crediticia en 4 pasos</h1>
+  <div class="header">
+    <div class="logo"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+    <div>
+      <div class="h-title">Neuro Crédito</div>
+      <div class="h-sub">Disputa inteligente de crédito · proceso guiado</div>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:25%"></div></div>
+  <div class="stepper" id="stepper">
+    <div class="step-wrap"><div class="step-dot active" id="sd1">1</div><div class="step-label active" id="sl1">Identidad</div></div>
+    <div class="step-line" id="ln1"></div>
+    <div class="step-wrap"><div class="step-dot" id="sd2">2</div><div class="step-label" id="sl2">Disputa</div></div>
+    <div class="step-line" id="ln2"></div>
+    <div class="step-wrap"><div class="step-dot" id="sd3">3</div><div class="step-label" id="sl3">Documentos</div></div>
+    <div class="step-line" id="ln3"></div>
+    <div class="step-wrap"><div class="step-dot" id="sd4">4</div><div class="step-label" id="sl4">Revisión</div></div>
+  </div>
+
+  <div id="p1" class="panel active">
+    <div class="panel-title">Datos de identidad</div>
+    <div class="panel-desc">Ingresa tu información personal para iniciar la disputa. Todos tus datos están protegidos con cifrado de extremo a extremo.</div>
+    <div class="grid2">
+      <div class="frow"><label class="flabel">Nombre(s)</label><input class="finput" id="f-nombre" placeholder="María Elena" oninput="sync()"></div>
+      <div class="frow"><label class="flabel">Apellidos</label><input class="finput" id="f-apellidos" placeholder="García Romero" oninput="sync()"></div>
+    </div>
+    <div class="grid2">
+      <div class="frow"><label class="flabel">RFC / CURP</label><input class="finput" id="f-rfc" placeholder="GARM850312..." oninput="sync()"></div>
+      <div class="frow"><label class="flabel">Teléfono de contacto</label><input class="finput" id="f-tel" placeholder="+52 55 0000 0000" oninput="sync()"></div>
+    </div>
+    <div class="frow"><label class="flabel">Correo electrónico</label><input class="finput" id="f-email" type="email" placeholder="correo@ejemplo.com" oninput="sync()"></div>
+    <div class="frow">
+      <label class="flabel">Buró de crédito a disputar</label>
+      <div class="badge-group" id="buro-group">
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','Buró de Crédito')">Buró de Crédito</div>
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','Círculo de Crédito')">Círculo de Crédito</div>
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','Ambos')">Ambos</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="p2" class="panel">
+    <div class="panel-title">Detalles de la disputa</div>
+    <div class="panel-desc">Especifica el tipo de error reportado y el acreedor involucrado. Sé preciso — esto aumenta significativamente la tasa de éxito.</div>
+    <div class="frow">
+      <label class="flabel">Tipo de disputa</label>
+      <div class="badge-group" id="tipo-group">
+        <div class="badge" onclick="selGroup('tipo-group',this,'tipo','Pago reportado como incumplido')">Pago incumplido incorrecto</div>
+        <div class="badge" onclick="selGroup('tipo-group',this,'tipo','Cuenta no reconocida')">Cuenta no reconocida</div>
+        <div class="badge" onclick="selGroup('tipo-group',this,'tipo','Saldo incorrecto')">Saldo incorrecto</div>
+        <div class="badge" onclick="selGroup('tipo-group',this,'tipo','Cuenta ya saldada')">Cuenta ya saldada</div>
+        <div class="badge" onclick="selGroup('tipo-group',this,'tipo','Robo de identidad')">Robo de identidad</div>
+        <div class="badge" onclick="selGroup('tipo-group',this,'tipo','Fecha de apertura errónea')">Fecha errónea</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="frow"><label class="flabel">Nombre del acreedor</label><input class="finput" id="f-acreedor" placeholder="Ej. BBVA, HSBC, Coppel..." oninput="sync()"></div>
+      <div class="frow"><label class="flabel">Cuenta (últimos 4 dígitos)</label><input class="finput" id="f-cuenta" placeholder="XXXX" maxlength="4" oninput="sync()"></div>
+    </div>
+    <div class="frow"><label class="flabel">Monto en disputa (MXN)</label><input class="finput" id="f-monto" placeholder="0.00" type="number" min="0" oninput="sync()"></div>
+    <div class="frow">
+      <label class="flabel">Descripción detallada del error</label>
+      <textarea class="finput" id="f-desc" placeholder="Describe con precisión el error en tu historial crediticio: cuándo ocurrió, cómo lo descubriste y por qué es incorrecto..." oninput="sync()"></textarea>
+    </div>
+  </div>
+
+  <div id="p3" class="panel">
+    <div class="panel-title">Documentos de respaldo</div>
+    <div class="panel-desc">Adjunta los documentos que respalden tu disputa. Mayor evidencia equivale a mayor probabilidad de resolución.</div>
+    <div class="alert-box">
+      <i class="ti ti-info-circle" aria-hidden="true"></i>
+      <span>Para mejores resultados adjunta: estado de cuenta, comprobante de pago, identificación oficial y cualquier comunicación con el acreedor.</span>
+    </div>
+    <div class="doc-drop" onclick="document.getElementById('file-input').click()">
+      <i class="ti ti-cloud-upload" aria-hidden="true"></i>
+      <div class="doc-drop-label">Haz clic para <span>subir documentos</span> o arrastra aquí tus archivos</div>
+      <div style="font-size:11px;color:#333;margin-top:6px">PDF · JPG · PNG · máx. 10 MB por archivo</div>
+    </div>
+    <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFiles(this.files)">
+    <div class="doc-list" id="doc-list"></div>
+    <div style="margin-top:1.5rem">
+      <div class="frow">
+        <label class="flabel">Nivel de urgencia</label>
+        <div class="badge-group" id="urg-group">
+          <div class="badge" onclick="selGroup('urg-group',this,'urg','Estándar (30 días)')">Estándar · 30 días</div>
+          <div class="badge sel" onclick="selGroup('urg-group',this,'urg','Prioritario (15 días)')">Prioritario · 15 días</div>
+          <div class="badge" onclick="selGroup('urg-group',this,'urg','Urgente (5 días hábiles)')">Urgente · 5 días</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="p4" class="panel">
+    <div class="panel-title">Revisión y envío</div>
+    <div class="panel-desc">Verifica que toda la información sea correcta antes de enviar tu disputa oficial. Una vez enviada, recibirás tu número de folio.</div>
+    <div class="review-section">
+      <div class="review-header"><i class="ti ti-user" aria-hidden="true"></i><span>Datos personales</span></div>
+      <div class="review-row"><span class="rk">Nombre completo</span><span class="rv" id="rv-nombre">—</span></div>
+      <div class="review-row"><span class="rk">RFC / CURP</span><span class="rv" id="rv-rfc">—</span></div>
+      <div class="review-row"><span class="rk">Teléfono</span><span class="rv" id="rv-tel">—</span></div>
+      <div class="review-row"><span class="rk">Correo</span><span class="rv" id="rv-email">—</span></div>
+      <div class="review-row"><span class="rk">Buró</span><span class="rv gold" id="rv-buro">—</span></div>
+    </div>
+    <div class="review-section">
+      <div class="review-header"><i class="ti ti-file-description" aria-hidden="true"></i><span>Detalles de la disputa</span></div>
+      <div class="review-row"><span class="rk">Tipo</span><span class="rv gold" id="rv-tipo">—</span></div>
+      <div class="review-row"><span class="rk">Acreedor</span><span class="rv" id="rv-acreedor">—</span></div>
+      <div class="review-row"><span class="rk">Cuenta</span><span class="rv" id="rv-cuenta">—</span></div>
+      <div class="review-row"><span class="rk">Monto en disputa</span><span class="rv gold" id="rv-monto">—</span></div>
+    </div>
+    <div class="review-section">
+      <div class="review-header"><i class="ti ti-paperclip" aria-hidden="true"></i><span>Documentos y urgencia</span></div>
+      <div class="review-row"><span class="rk">Archivos adjuntos</span><span class="rv" id="rv-docs">Ninguno</span></div>
+      <div class="review-row"><span class="rk">Urgencia</span><span class="rv gold" id="rv-urg">Prioritario (15 días)</span></div>
+    </div>
+  </div>
+
+  <div id="p5" class="panel">
+    <div class="success-wrap">
+      <div class="success-icon"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
+      <div class="success-title">Disputa enviada con éxito</div>
+      <div class="success-desc">Tu disputa ha sido registrada y será procesada conforme a los plazos establecidos por la Ley para Regular las Sociedades de Información Crediticia.</div>
+      <div class="folio" id="folio-num">NC-2026-000000</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-label"><strong>Hoy</strong> — Disputa recibida y asignada al área de análisis</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#555"></div><div class="tl-label"><strong>Día 3</strong> — Acreedor notificado oficialmente</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#555"></div><div class="tl-label"><strong id="tl-d3">Día 7</strong> — Revisión de documentos adjuntos</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#555"></div><div class="tl-label"><strong id="tl-d4">Día 15</strong> — Resolución esperada y notificación</div></div>
+      </div>
+      <button class="btn-restart" onclick="restart()">
+        <i class="ti ti-refresh" style="font-size:14px" aria-hidden="true"></i>Iniciar nueva disputa
+      </button>
+    </div>
+  </div>
+
+  <div class="nav-row" id="nav-row">
+    <button class="btn-back" id="btn-back" onclick="prevStep()" style="visibility:hidden">
+      <i class="ti ti-arrow-left" style="font-size:14px" aria-hidden="true"></i>Anterior
+    </button>
+    <div class="step-counter" id="step-counter">Paso 1 de 4</div>
+    <button class="btn-next" id="btn-next" onclick="nextStep()">
+      Continuar<i class="ti ti-arrow-right" style="font-size:14px" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwrai-G7uBkmQN1P_9oDmxItJnosnmE7Lnc8FtErdylEwkq1GQzwU0MjDnEA5lu4N_V/exec';
+
+  let cur = 1;
+  const state = { buro:'', tipo:'', urg:'Prioritario (15 días)' };
+  const docs = [];
+
+  function selGroup(groupId, el, key, val) {
+    document.querySelectorAll('#' + groupId + ' .badge').forEach(b => b.classList.remove('sel'));
+    el.classList.add('sel');
+    state[key] = val;
+    sync();
+  }
+
+  function handleFiles(files) {
+    Array.from(files).forEach(f => {
+      if (docs.length >= 8) return;
+      docs.push(f.name);
+      renderDocs();
+    });
+    sync();
+  }
+
+  function renderDocs() {
+    const list = document.getElementById('doc-list');
+    list.innerHTML = '';
+    docs.forEach((name, i) => {
+      const d = document.createElement('div');
+      d.className = 'doc-item';
+      d.innerHTML = '<i class="ti ti-file" aria-hidden="true"></i><span class="doc-item-name">' + name + '</span><button class="doc-item-rm" onclick="removeDoc(' + i + ')" aria-label="Eliminar archivo"><i class="ti ti-x" aria-hidden="true"></i></button>';
+      list.appendChild(d);
+    });
+  }
+
+  function removeDoc(i) { docs.splice(i, 1); renderDocs(); sync(); }
+
+  function sync() {
+    const n = (document.getElementById('f-nombre').value.trim() + ' ' + document.getElementById('f-apellidos').value.trim()).trim();
+    document.getElementById('rv-nombre').textContent = n || '—';
+    document.getElementById('rv-rfc').textContent = document.getElementById('f-rfc').value.trim() || '—';
+    document.getElementById('rv-tel').textContent = document.getElementById('f-tel').value.trim() || '—';
+    document.getElementById('rv-email').textContent = document.getElementById('f-email').value.trim() || '—';
+    document.getElementById('rv-buro').textContent = state.buro || '—';
+    document.getElementById('rv-tipo').textContent = state.tipo || '—';
+    document.getElementById('rv-acreedor').textContent = document.getElementById('f-acreedor').value.trim() || '—';
+    const cta = document.getElementById('f-cuenta').value.trim();
+    document.getElementById('rv-cuenta').textContent = cta ? '****' + cta : '—';
+    const m = document.getElementById('f-monto').value;
+    document.getElementById('rv-monto').textContent = m ? '$' + parseFloat(m).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN' : '—';
+    document.getElementById('rv-urg').textContent = state.urg;
+    document.getElementById('rv-docs').textContent = docs.length ? docs.length + ' archivo' + (docs.length > 1 ? 's' : '') : 'Ninguno';
+  }
+
+  function updateStepper() {
+    for (let i = 1; i <= 4; i++) {
+      const dot = document.getElementById('sd' + i);
+      const lbl = document.getElementById('sl' + i);
+      dot.classList.remove('active', 'done');
+      lbl.classList.remove('active', 'done');
+      if (i < cur) {
+        dot.classList.add('done');
+        dot.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i>';
+        lbl.classList.add('done');
+      } else if (i === cur) {
+        dot.classList.add('active');
+        dot.textContent = i;
+        lbl.classList.add('active');
+      } else {
+        dot.textContent = i;
+      }
+      if (i < 4) document.getElementById('ln' + i).classList.toggle('done', i < cur);
+    }
+    document.getElementById('prog').style.width = (cur / 4 * 100) + '%';
+    document.getElementById('step-counter').textContent = 'Paso ' + cur + ' de 4';
+    document.getElementById('btn-back').style.visibility = cur > 1 ? 'visible' : 'hidden';
+    const bn = document.getElementById('btn-next');
+    if (cur === 4) {
+      bn.innerHTML = 'Enviar disputa<i class="ti ti-send" style="font-size:14px" aria-hidden="true"></i>';
+    } else {
+      bn.innerHTML = 'Continuar<i class="ti ti-arrow-right" style="font-size:14px" aria-hidden="true"></i>';
+    }
+  }
+
+  function showPanel(n) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('p' + n).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function nextStep() {
+    if (cur < 4) { cur++; updateStepper(); showPanel(cur); }
+    else { submitDisputa(); }
+  }
+
+  function prevStep() {
+    if (cur > 1) { cur--; updateStepper(); showPanel(cur); }
+  }
+
+  async function submitDisputa() {
+    const btn = document.getElementById('btn-next');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div>Enviando...';
+
+    const nombre = (document.getElementById('f-nombre').value.trim() + ' ' + document.getElementById('f-apellidos').value.trim()).trim();
+    const m = document.getElementById('f-monto').value;
+
+    const payload = {
+      nombre: nombre || '—',
+      telefono: document.getElementById('f-tel').value.trim() || '—',
+      correo: document.getElementById('f-email').value.trim() || '—',
+      buro: state.buro || '—',
+      tipo: state.tipo || '—',
+      acreedor: document.getElementById('f-acreedor').value.trim() || '—',
+      monto: m ? '$' + parseFloat(m).toLocaleString('es-MX', {minimumFractionDigits:2}) + ' MXN' : '—',
+      urgencia: state.urg
+    };
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+    } catch(e) {
+      console.warn('Sheet sync error:', e);
+    }
+
+    const folio = 'NC-' + new Date().getFullYear() + '-' + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById('folio-num').textContent = folio;
+    const days = state.urg.includes('5') ? 5 : state.urg.includes('15') ? 15 : 30;
+    document.getElementById('tl-d4').textContent = 'Día ' + days;
+    document.getElementById('tl-d3').textContent = 'Día ' + Math.round(days * 0.5);
+
+    showPanel(5);
+    document.getElementById('nav-row').style.display = 'none';
+    document.getElementById('stepper').style.display = 'none';
+    document.getElementById('prog').parentElement.style.display = 'none';
+  }
+
+  function restart() {
+    cur = 1;
+    document.querySelectorAll('.finput').forEach(el => { el.value = ''; });
+    document.querySelectorAll('.badge').forEach(b => b.classList.remove('sel'));
+    document.querySelector('#urg-group .badge:nth-child(2)').classList.add('sel');
+    docs.length = 0;
+    document.getElementById('doc-list').innerHTML = '';
+    state.buro = ''; state.tipo = ''; state.urg = 'Prioritario (15 días)';
+    document.getElementById('nav-row').style.display = 'flex';
+    document.getElementById('stepper').style.display = 'flex';
+    document.getElementById('prog').parentElement.style.display = 'block';
+    const btn = document.getElementById('btn-next');
+    btn.disabled = false;
+    updateStepper();
+    showPanel(1);
+    sync();
+  }
+
+  updateStepper();
+  sync();
+</script>
+</body>
+</html>
