@@ -144,16 +144,17 @@
       <div class="frow"><label class="flabel">Apellidos</label><input class="finput" id="f-apellidos" placeholder="García Romero" oninput="sync()"></div>
     </div>
     <div class="grid2">
-      <div class="frow"><label class="flabel">RFC / CURP</label><input class="finput" id="f-rfc" placeholder="GARM850312..." oninput="sync()"></div>
-      <div class="frow"><label class="flabel">Teléfono de contacto</label><input class="finput" id="f-tel" placeholder="+52 55 0000 0000" oninput="sync()"></div>
+      <div class="frow"><label class="flabel">Social Security (SSN)</label><input class="finput" id="f-rfc" placeholder="XXX-XX-XXXX" oninput="sync()"></div>
+      <div class="frow"><label class="flabel">Teléfono de contacto</label><input class="finput" id="f-tel" placeholder="+1 (215) 000-0000" oninput="sync()"></div>
     </div>
     <div class="frow"><label class="flabel">Correo electrónico</label><input class="finput" id="f-email" type="email" placeholder="correo@ejemplo.com" oninput="sync()"></div>
     <div class="frow">
       <label class="flabel">Buró de crédito a disputar</label>
       <div class="badge-group" id="buro-group">
-        <div class="badge" onclick="selGroup('buro-group',this,'buro','Buró de Crédito')">Buró de Crédito</div>
-        <div class="badge" onclick="selGroup('buro-group',this,'buro','Círculo de Crédito')">Círculo de Crédito</div>
-        <div class="badge" onclick="selGroup('buro-group',this,'buro','Ambos')">Ambos</div>
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','Experian')">Experian</div>
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','TransUnion')">TransUnion</div>
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','Equifax')">Equifax</div>
+        <div class="badge" onclick="selGroup('buro-group',this,'buro','Los tres burós')">Los tres</div>
       </div>
     </div>
   </div>
@@ -173,13 +174,13 @@
       </div>
     </div>
     <div class="grid2">
-      <div class="frow"><label class="flabel">Nombre del acreedor</label><input class="finput" id="f-acreedor" placeholder="Ej. BBVA, HSBC, Coppel..." oninput="sync()"></div>
+      <div class="frow"><label class="flabel">Nombre del acreedor</label><input class="finput" id="f-acreedor" placeholder="Ej. Capital One, Chase, Comenity..." oninput="sync()"></div>
       <div class="frow"><label class="flabel">Cuenta (últimos 4 dígitos)</label><input class="finput" id="f-cuenta" placeholder="XXXX" maxlength="4" oninput="sync()"></div>
     </div>
-    <div class="frow"><label class="flabel">Monto en disputa (MXN)</label><input class="finput" id="f-monto" placeholder="0.00" type="number" min="0" oninput="sync()"></div>
+    <div class="frow"><label class="flabel">Monto en disputa (USD)</label><input class="finput" id="f-monto" placeholder="0.00" type="number" min="0" oninput="sync()"></div>
     <div class="frow">
       <label class="flabel">Descripción detallada del error</label>
-      <textarea class="finput" id="f-desc" placeholder="Describe con precisión el error en tu historial crediticio: cuándo ocurrió, cómo lo descubriste y por qué es incorrecto..." oninput="sync()"></textarea>
+      <textarea class="finput" id="f-desc" placeholder="Describe con precisión el error en tu reporte de crédito: cuándo ocurrió, cómo lo descubriste y por qué es incorrecto..." oninput="sync()"></textarea>
     </div>
   </div>
 
@@ -188,7 +189,7 @@
     <div class="panel-desc">Adjunta los documentos que respalden tu disputa. Mayor evidencia equivale a mayor probabilidad de resolución.</div>
     <div class="alert-box">
       <i class="ti ti-info-circle" aria-hidden="true"></i>
-      <span>Para mejores resultados adjunta: estado de cuenta, comprobante de pago, identificación oficial y cualquier comunicación con el acreedor.</span>
+      <span>Para mejores resultados adjunta: reporte de crédito, comprobante de pago, identificación oficial (Driver's License o Passport) y cualquier comunicación con el acreedor.</span>
     </div>
     <div class="doc-drop" onclick="document.getElementById('file-input').click()">
       <i class="ti ti-cloud-upload" aria-hidden="true"></i>
@@ -215,7 +216,7 @@
     <div class="review-section">
       <div class="review-header"><i class="ti ti-user" aria-hidden="true"></i><span>Datos personales</span></div>
       <div class="review-row"><span class="rk">Nombre completo</span><span class="rv" id="rv-nombre">—</span></div>
-      <div class="review-row"><span class="rk">RFC / CURP</span><span class="rv" id="rv-rfc">—</span></div>
+      <div class="review-row"><span class="rk">SSN</span><span class="rv" id="rv-rfc">—</span></div>
       <div class="review-row"><span class="rk">Teléfono</span><span class="rv" id="rv-tel">—</span></div>
       <div class="review-row"><span class="rk">Correo</span><span class="rv" id="rv-email">—</span></div>
       <div class="review-row"><span class="rk">Buró</span><span class="rv gold" id="rv-buro">—</span></div>
@@ -234,14 +235,12 @@
     </div>
   </div>
 
-  <!-- CONFIRMACIÓN -->
   <div id="p5" class="panel">
     <div class="success-wrap">
       <div class="success-icon"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
       <div class="success-title">Caso recibido y en evaluación</div>
       <div style="font-size:13px;color:var(--gray);margin-bottom:1rem">Folio de seguimiento</div>
       <div class="folio" id="folio-num">NC-2026-000000</div>
-
       <div class="status-card">
         <div class="status-card-title">
           <i class="ti ti-checks" aria-hidden="true"></i>
@@ -256,16 +255,13 @@
           Agendar mi consulta gratuita
         </a>
       </div>
-
       <div class="divider-text">proceso de seguimiento</div>
-
       <div class="timeline">
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-label"><strong>Hoy</strong> — Caso registrado y en revisión por nuestro equipo</div></div>
         <div class="tl-item"><div class="tl-dot"></div><div class="tl-label"><strong>24–48 hrs</strong> — Te contactamos para confirmar elegibilidad</div></div>
         <div class="tl-item"><div class="tl-dot dim"></div><div class="tl-label"><strong id="tl-d3">Día 7</strong> — Inicio del proceso de disputa formal</div></div>
         <div class="tl-item"><div class="tl-dot dim"></div><div class="tl-label"><strong id="tl-d4">Día 15</strong> — Resolución esperada y notificación al buró</div></div>
       </div>
-
       <button class="btn-restart" onclick="restart()">
         <i class="ti ti-refresh" style="font-size:13px" aria-hidden="true"></i>Enviar otra disputa
       </button>
@@ -284,7 +280,7 @@
 </div>
 
 <script>
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwrai-G7uBkmQN1P_9oDmxItJnosnmE7Lnc8FtErdylEwkq1GQzwU0MjDnEA5lu4N_V/exec';
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyLO7yW5yAZeg5eh3_37oGYX9oD8tA52mw6f_Kz-iysH97tcRzaJo-Snb9MXgSaUz4G/exec';
 
   let cur = 1;
   const state = { buro:'', tipo:'', urg:'Prioritario (15 días)' };
@@ -331,7 +327,7 @@
     const cta = document.getElementById('f-cuenta').value.trim();
     document.getElementById('rv-cuenta').textContent = cta ? '****' + cta : '—';
     const m = document.getElementById('f-monto').value;
-    document.getElementById('rv-monto').textContent = m ? '$' + parseFloat(m).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MXN' : '—';
+    document.getElementById('rv-monto').textContent = m ? '$' + parseFloat(m).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD' : '—';
     document.getElementById('rv-urg').textContent = state.urg;
     document.getElementById('rv-docs').textContent = docs.length ? docs.length + ' archivo' + (docs.length > 1 ? 's' : '') : 'Ninguno';
   }
@@ -396,7 +392,7 @@
       buro: state.buro || '—',
       tipo: state.tipo || '—',
       acreedor: document.getElementById('f-acreedor').value.trim() || '—',
-      monto: m ? '$' + parseFloat(m).toLocaleString('es-MX', {minimumFractionDigits:2}) + ' MXN' : '—',
+      monto: m ? '$' + parseFloat(m).toLocaleString('en-US', {minimumFractionDigits:2}) + ' USD' : '—',
       urgencia: state.urg
     };
 
